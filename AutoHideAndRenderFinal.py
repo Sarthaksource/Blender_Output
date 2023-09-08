@@ -58,8 +58,6 @@ def render(current_object, head_name, bottom_name, top_name):
         
 #collection_name_to_target = "Val"
 
-#print("AYO: ",Caller.a)
-
 head_name = [""]
 bottom_name = [""]
 top_name = [""]
