@@ -1,4 +1,5 @@
 import bpy
+import os
 
 def get_current_index(collection):
     return collection.get("current_index", 0)
@@ -33,10 +34,11 @@ def disable_next_object_in_sequence(collection_name, head_name, bottom_name, top
     render(next_object, head_name[0], bottom_name[0], top_name[0])
 
 def render(current_object, head_name, bottom_name, top_name):
-    output_path = "G:/Animation/Test/"
-    
-    #start_frame = 1
-    #end_frame = 5
+    output_path = "Path"
+
+    # Use this for complete output
+    # start_frame = 1
+    # end_frame = 32
     
     current_frame = bpy.context.scene.frame_current
     
@@ -44,35 +46,47 @@ def render(current_object, head_name, bottom_name, top_name):
 
     file_path = bpy.path.abspath(f"{output_path}{head_name}_{top_name}_{bottom_name}")
     
-    #file_path = bpy.path.abspath(f"{output_path}{current_frame}")
-
+    # file_path = bpy.path.abspath(f"{output_path}{head_name}_{top_name}_{bottom_name}.mp4")    #Use it for mp4 output
+    
+    if os.path.exists(file_path):
+        print(f"File {file_path} already exists. Skipping rendering.")
+        return
+    
     bpy.context.scene.render.filepath = file_path
     bpy.context.scene.render.image_settings.file_format = 'PNG'
-    
-    #bpy.context.scene.frame_start = start_frame
-    #bpy.context.scene.frame_end = end_frame
-        
-    #bpy.ops.render.render(animation=True)
 
+    # Use these for mp4 output
+    
+    # bpy.context.scene.render.image_settings.file_format = 'FFMPEG'
+    # bpy.context.scene.render.ffmpeg.format = 'MPEG4'
+    # bpy.context.scene.render.ffmpeg.codec = 'H264'
+    # bpy.context.scene.render.ffmpeg.constant_rate_factor = 'HIGH'
+    
+    # bpy.context.scene.frame_start = start_frame
+    # bpy.context.scene.frame_end = end_frame  
+    
+    # bpy.ops.render.render(animation=True)
+
+    # Use it for one frame output
     bpy.ops.render.render(write_still=True)
-        
-#collection_name_to_target = "Val"
 
 head_name = [""]
 bottom_name = [""]
 top_name = [""]
-i=0
+first_it=0
 
-while(i<5):
-    j=0
+first_col_len = 5
+second_col_len = 5
+third_col_len = 5
+
+while(first_it<first_col_len):
+    second_it=0
     disable_next_object_in_sequence("Head",head_name, bottom_name, top_name)
-    while(j<5):
-        k=0
+    while(second_it<second_col_len):
+        third_it=0
         disable_next_object_in_sequence("Top",head_name, bottom_name, top_name)
-        while(k<5):
+        while(third_it<third_col_len):
             disable_next_object_in_sequence("Bottom",head_name, bottom_name, top_name)
-            k += 1
-        j += 1
-    i += 1   
-
-#disable_next_object_in_sequence(collection_name_to_target)
+            third_it += 1
+        second_it += 1
+    first_it += 1   
